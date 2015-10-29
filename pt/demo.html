@@ -7,7 +7,6 @@
 
         <title>REA - Recurso Educacional Aberto</title>
 
-
         <!-- Bootstrap -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,15 +23,15 @@
 
         <!-- Faz o texto ficar no centro da barra de progresso -->
         <style>
-            .progress {
-                position: relative;
-            }
-
-            .progress span {
-                position: absolute;
-                display: block;
-                width: 100%;
-                color: black;
+            .achurado{
+                background: repeating-linear-gradient(
+                    -5deg,
+                    transparent,
+                    transparent, 10%,
+                    #EEE 12%,
+                    #EEE 15%,
+                    transparent 17%
+                );
             }
 
             #stack-wrapper {
@@ -41,19 +40,19 @@
             }
 
             .pc {
-                background-color: #F7C6D0;
+                background-color: #F7C6D0 !important;
             }
 
             .sp {
-                background-color: #E9F7C6;
+                background-color: #E9F7C6 !important;
             }
 
             .psw {
-                background-color: #D4C6F7;
+                background-color: #D4C6F7 !important;
             }
 
             .gpr {
-                background-color: #FFFFB5;
+                background-color: #FFFFB5 !important;
             }
         </style>
     </head>
@@ -87,23 +86,27 @@
                 <div class="col-xs-12 col-md-4 text-center">
                     <h2>Memória de Programa</h2>
                     <table class="table table-bordered table-hover table-condensed table-response">
+                        <thead>
+                            <tr class="active">
+                                <td colspan="2">Endereço</td>
+                                <td>Instruções</td>
+                            </tr>
+                        </thead>
                         <tr>
-                            <td><span class="glyphicon glyphicon-arrow-up"></span></td>
-                            <td>...</td>
-                        </tr>
-                        <tr>
+                            <td></td>
                             <td>0x0108</td>
                             <td>ADD R0 R1 R2</td>
                         </tr>
                         <tr>
+                            <td></td>
                             <td>0x0104</td>
                             <td>SUB R0 R1 R2</td>
                         </tr>
                         <tr>
-                            <td class="pc">[PC] <span class="glyphicon glyphicon-arrow-right"></span> 0x0100</td>
+                            <td class="pc">[PC] <span class="glyphicon glyphicon-arrow-right"></span></td>
+                            <td>0x0100</td>
                             <td>MUL R0 R1 R2</td>
                         </tr>
-                        
                     </table>
 
                     <h4>Pipeline</h4>
@@ -152,19 +155,19 @@
                     <h2>Registradores</h2>
                      <ul class="list-group">
                        <li class="list-group-item" style="background-color: #F06E8A;">[PC]</li>
-                       <li class="pc list-group-item">0x0100</li>
+                       <li id="pc" class="pc list-group-item">0x0100</li>
                      </ul>
 
                      <ul class="list-group">
                        <li class="list-group-item" style="background-color: #CBF06E;">[SP]</li>
-                       <li class="sp list-group-item">0x7FFC</li>
+                       <li id="sp" class="sp list-group-item">0x7FFC</li>
                      </ul>
 
                      <ul class="list-group">
                        <li class="list-group-item" style="background-color: #936EF0;">[PSW]</li>
-                       <li class="psw list-group-item">0x103F</li>
+                       <li id="psw" class="psw list-group-item">0x103F</li>
                      </ul>
-                     <ul class="list-group">
+                     <ul id="gpr" class="list-group">
                        <li class="list-group-item" style="background-color: #FFFF36;">[R0, R1, R2, R3]</li>
                        <li class="gpr list-group-item">0x0123</li>
                        <li class="gpr list-group-item">0x4567</li>
@@ -177,26 +180,30 @@
                     <div id="stack-wrapper">
                         <table id="stack" class="table table-bordered table-hover table-condensed table-response">
                             <thead>
-                                <tr>
-                                    <td>Endereço</td>
+                                <tr class="active">
+                                    <td colspan="2">Endereço</td>
                                     <td>Conteúdo</td>
                                 </tr>
                             </thead>
-                            <tr>
+                            <tr class="stack">
+                                <td></td>
                                 <td>0x7FF4</td>
-                                <td class="active">[Vazio]</td>
+                                <td class="achurado">[Vazio]</td>
                             </tr>
-                            <tr>
+                            <tr class="stack">
+                                <td></td>
                                 <td>0x7FF8</td>
-                                <td class="active">[Vazio]</td>
+                                <td class="achurado">[Vazio]</td>
                             </tr>
-                            <tr>
-                                <td class="sp">[SP] <span class="text-right glyphicon glyphicon-arrow-right"></span> 0x7FFC</td>
-                                <td class="active">[Vazio]</td>
+                            <tr class="stack">
+                                <td class="sp">[SP] <span class="text-right glyphicon glyphicon-arrow-right"></span></td>
+                                <td>0x7FFC</td>
+                                <td class="achurado">[Vazio]</td>
                             </tr>
-                            <tr>
-                                <td class="warning">0x8000</td>
-                                <td class="warning">[Base da Stack]</td>
+                            <tr class="active">
+                                <td></td>
+                                <td>0x8000</td>
+                                <td>[Base da Stack]</td>
                             </tr>
                         </table>
                     </div>
