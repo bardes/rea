@@ -9,6 +9,7 @@
 
         <!-- Bootstrap -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,14 +24,18 @@
 
         <!-- Faz o texto ficar no centro da barra de progresso -->
         <style>
+            body {
+                font-family: 'mono', 'Inconsolata';
+                font-weight: medium;
+            }
             .achurado{
                 background: repeating-linear-gradient(
-                    -5deg,
-                    transparent,
-                    transparent, 10%,
-                    #EEE 12%,
-                    #EEE 15%,
-                    transparent 17%
+                -5deg,
+                transparent,
+                transparent, 10%,
+                #EEE 12%,
+                #EEE 15%,
+                transparent 17%
                 );
             }
 
@@ -89,47 +94,47 @@
                         <thead>
                             <tr class="active">
                                 <td colspan="2">Endereço</td>
-                                <td>Instruções</td>
+                                <td style="width:50%;">Instruções</td>
                             </tr>
                         </thead>
                         <tr>
                             <td></td>
-                            <td>0x0108</td>
-                            <td>ADD R0 R1 R2</td>
+                            <td id="a2">0x0108</td>
+                            <td id="i2">ADD R0 R1 R2</td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td>0x0104</td>
-                            <td>SUB R0 R1 R2</td>
+                            <td id="a1">0x0104</td>
+                            <td id="i1">SUB R0 R1 R2</td>
                         </tr>
                         <tr>
                             <td class="pc">[PC] <span class="glyphicon glyphicon-arrow-right"></span></td>
-                            <td>0x0100</td>
-                            <td>MUL R0 R1 R2</td>
+                            <td id="a0">0x0100</td>
+                            <td id="i0">MUL R0 R1 R2</td>
                         </tr>
                     </table>
 
                     <h4>Pipeline</h4>
                     <table class="table table-bordered table-hover table-condensed table-response">
-                        <tr id="fetch">
+                        <tr>
                             <td>BUSCA</td>
-                            <td>ADD R0 R1 R2</td>
+                            <td style="width:50%;" id="fetch">ADD R0 R1 R2</td>
                         </tr>
-                        <tr id="decode">
+                        <tr>
                             <td>DECODIFICAÇÃO</td>
-                            <td>SUB R0 R1 R2</td>
+                            <td id="decode">SUB R0 R1 R2</td>
                         </tr>
-                        <tr id="execute">
+                        <tr>
                             <td>EXECUÇÃO</td>
-                            <td>MUL R0 R1 R2</td>
+                            <td id="execute">MUL R0 R1 R2</td>
                         </tr>
-                        <tr id="memory">
+                        <tr>
                             <td>MEMÓRIA</td>
-                            <td>MUL R0 R1 R2</td>
+                            <td id="memory">MUL R0 R1 R2</td>
                         </tr>
-                        <tr id="wback">
+                        <tr>
                             <td>ESCRITA</td>
-                            <td>MUL R0 R1 R2</td>
+                            <td id="wback">MUL R0 R1 R2</td>
                         </tr>
                     </table>
 
@@ -143,12 +148,11 @@
                     <br>
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <div class="panel-title">Ajuda</div>
+                            <div id="hint-title" class="panel-title">Ajuda</div>
                         </div>
-                        <div id="help" class="panel-body" style="line-height: 2.5ex; height: 7.5ex; overflow: hidden;">
+                        <div id="hint" class="panel-body" style="line-height: 2ex; height: 8ex; font-size: 9pt; overflow: hidden;">
                         </div>
                     </div>
-
                 </div>
 
                 <div class="col-xs-12 col-md-4 text-center">
@@ -168,11 +172,11 @@
                        <li id="psw" class="psw list-group-item">0x103F</li>
                      </ul>
                      <ul id="gpr" class="list-group">
-                       <li class="list-group-item" style="background-color: #FFFF36;">[R0, R1, R2, R3]</li>
-                       <li class="gpr list-group-item">0x0123</li>
-                       <li class="gpr list-group-item">0x4567</li>
-                       <li class="gpr list-group-item">0x89AB</li>
-                       <li class="gpr list-group-item">0xCDEF</li>
+                       <li class="list-group-item" style="background-color: #FFFF36;">[Registradores de Propósito Geral]</li>
+                       <li id="r0" class="gpr list-group-item">0x0123</li>
+                       <li id="r1" class="gpr list-group-item">0x4567</li>
+                       <li id="r2" class="gpr list-group-item">0x89AB</li>
+                       <li id="r3" class="gpr list-group-item">0xCDEF</li>
                      </ul>
                 </div>
                 <div class="col-xs-12 col-md-4 text-center">
@@ -182,29 +186,31 @@
                             <thead>
                                 <tr class="active">
                                     <td colspan="2">Endereço</td>
-                                    <td>Conteúdo</td>
+                                    <td style="width:50%;">Conteúdo</td>
                                 </tr>
                             </thead>
-                            <tr class="stack">
+                            <tr>
                                 <td></td>
                                 <td>0x7FF4</td>
                                 <td class="achurado">[Vazio]</td>
                             </tr>
-                            <tr class="stack">
+                            <tr>
                                 <td></td>
                                 <td>0x7FF8</td>
                                 <td class="achurado">[Vazio]</td>
                             </tr>
-                            <tr class="stack">
+                            <tr>
                                 <td class="sp">[SP] <span class="text-right glyphicon glyphicon-arrow-right"></span></td>
                                 <td>0x7FFC</td>
                                 <td class="achurado">[Vazio]</td>
                             </tr>
-                            <tr class="active">
+                            <!--
+                            <tr id="stack_bottom" class="active">
                                 <td></td>
                                 <td>0x8000</td>
                                 <td>[Base da Stack]</td>
                             </tr>
+                            -->
                         </table>
                     </div>
                 </div>
