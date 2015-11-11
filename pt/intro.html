@@ -50,12 +50,22 @@
             <div class="container">
                 <h1>Interrupções Precisas e Imprecisas</h1>
                 <p class="text-justify">
-                Ao se tratar de uma interrupção precisa, o pipeline é esvaziado (seja descartando os estágios incompletos ou terminando a execução de todos eles) e o PC -program counter, registrador que contém o endereço da próxima instrução a executar- passa a apontar para a instrução seguinte à possível causa da interrupção. Finalmente o estado dos registradores é salvo (o que é visualmente indicado também) e o controle é entregue ao seguimento de código determinado pela tabela de interrupções (interrupt vector).
+                    Este REA (Recurso Educacional Aberto) tem como objetivo mostrar o que são e como funcionam as interrupções
+                    precisas e imprecisas. Ambas são métodos diferentes de lidar com o mesmo problema: interromper (e retomar) a execução
+                    de programas numa CPU que possua um pipiline.
                 </p>
+
                 <p class="text-justify">
-No caso da representação de uma interrupção imprecisa, que é exclusivamente de software, passa por um processo idêntico, porém o pipeline não é esvaziado, deixando PC apontando para uma instrução parcialmente executada, cercada de outras instruções também incompletas. Nesse caso se o S.O. precisar determinar a instrução causadora da interrupção não basta examinar a instrução anterior ao PC, mas sim toda a “região” do PC. Por isso o nome “imprecisa”.
+                    Quando uma interupção acontece é preciso determinar a causa,
+                    tratá-la e retomar a execução normal, quando possível, ou finalizar o programa afetado, porém a presença do
+                    pipiline torna essa tarefa não trivial, já que qualquer uma das instruções no pipeline pode causar uma interrupção.
                 </p>
-                
+                <p class="text-justfy">
+                    Interrumpções PRECISAS resolvem esse problema em diversos passos, garantindo que a CPU esteja num estado consistente.
+                    Já as interrupções IMPRECISAS são tratadas em menos etapas (melhor tempo de resposta), porém delegando a responsabilidade
+                    de ajustar o estado da CPU para as rotinas de tratamento de interrupção.
+                    </p>
+
                 <p><a class="btn btn-primary btn-lg" href="./demo.html" role="button">Ver Demo!</a></p>
             </div>
         </div>
