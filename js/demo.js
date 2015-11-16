@@ -258,12 +258,14 @@ function Simulation(code) {
             this.state = "interrupt";
             this.substate = this.is_precise ? "p_detected" : "i_detected";
             setHint("Divisão por zero detectada!");
+            $("#execute").addClass("danger");
             return;
         } else if(this.pipeline[2].op == "mul" &&
                 this.gpr[this.pipeline[2].ry] * this.gpr[this.pipeline[2].rz] > 65535) {
             this.state = "interrupt";
             this.substate = this.is_precise ? "p_detected" : "i_detected";
             setHint("Overflow detectado!");
+            $("#execute").addClass("danger");
             return;
         }
 
@@ -285,7 +287,7 @@ function Simulation(code) {
 
             case "p_empty":
                 if(this.pipeline[3].op == 'nop' && this.pipeline[4].op == 'nop') {
-                    setHint("Não há mais instruções para terminar.")
+                    setHint("Não há mais instruções para terminar.");
                     this.substate = 'p_change_pc';
                 } else {
                     setHint("Termina de executar as intruções que entraram antes da interrupção.")
@@ -305,6 +307,7 @@ function Simulation(code) {
                 setHint("Esvazia o conteúdo do pipeline.");
                 this.pipeline[0] = this.pipeline[1] = this.pipeline[2] = nop();
                 this.substate = "p_push_pc";
+                $("#execute").removeClass("danger");
                 break;
 
             case "p_push_pc":
@@ -503,6 +506,7 @@ $(function() {
         if(sim.state != "reset") {
             sim = new Simulation(asm_code);
             enableHints();
+            $("#execute").removeClass("danger");
         }
     });
 
