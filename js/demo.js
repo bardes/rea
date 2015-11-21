@@ -116,10 +116,10 @@ function Instruction(op, rx, ry, rz) {
 
     this.toString = function() {
         var s = this.op.toUpperCase();
-        if(this.rx != undefined) s += " R" + this.rx;
-        if(this.ry != undefined) s += " R" + this.ry;
-        if(this.rz != undefined) s += " R" + this.rz;
-        if(this.im != undefined) s += " [" + hex(this.im) + "]";
+        if(this.rx !== undefined) s += " R" + this.rx;
+        if(this.ry !== undefined) s += " R" + this.ry;
+        if(this.rz !== undefined) s += " R" + this.rz;
+        if(this.im !== undefined) s += " [" + hex(this.im) + "]";
         return s; 
     };
 }
@@ -160,27 +160,57 @@ function Simulation(code) {
     this.substate = undefined;  // Used during interrupt handling
     this.is_precise = true;     // Which kind of interrupt is set to happen
 
-    this.code = code.slice();   // Gets the code on creation
+    this.code = code;           // Gets the code on creation
     this.pc = 0;                // Entry point at begining of .text
     this.psw = 0xFFFF;          // No meaning for the bits (for now?)
     this.sp = 0xFFFE;           // Stack starts empty
     this.stack = [];            // Stack's content
     this.data = [];             // Program data
+    this.gambi = 0;
     
     this.gpr = [0,0,0,0];       // Data registers start zeroed
 
-    // Instructions on the pipeline
-    this.pipeline = [
-        nop(),
-        nop(),
-        nop(),
-        nop(),
-        nop()
-    ]; 
+    // Pipeline starts empty
+    this.pipeline = [];
+
+    this.finished = []; // Finished instructions
+
+    this.put_instruction = function(inst, addr, type, side_info) {
+        var elem = $("<tr>").addClass(type).append(
+                       $("<td>").html(side_info),
+                       $("<td>").html(addr !== undefined && hex(addr) || '---'),
+                       $("<td>").html(inst.toString())
+                    );
+        $("#prog>tbody").append(elem);
+    };
 
     this.display = function() {
 
         // Display the instructions
+        var lines = 11;
+        $("#prog>tbody>*").remove();
+        for (var i = this.pc + 2; i > this.pc; --i, --lines)
+            this.put_instruction(this.code[i] || nop(), 0x100 + 2*i, "not_executed");
+
+        --lines;
+        this.put_instruction(this.code[i] || nop(), 0x100 + 2*i--, "not_executed",
+                '[PC] <span class="text-right glyphicon glyphicon-arrow-right"></span>');
+
+        for (var j in this.pipeline) {
+            this.put_instruction(this.pipeline[j], (i - j + this.gambi)*2 + 0x100, "pipeline", ">>>");
+            --lines;
+        }
+        
+        
+        // Insere as instruções dentro do pipe line
+        for (j = 0; lines && j < this.finished.length; ++j, --lines)
+            this.put_instruction(this.finished[j], (i - this.pipeline.length - j + this.gambi)*2 + 0x100, "executed");
+        
+        for (; lines; --lines)
+            this.put_instruction("---", undefined, undefined, "---");
+        
+        
+        /*
         $("#a0").html(hex(this.pc * 2 + 0x0100));
         $("#a1").html(hex((this.pc + 1) * 2 + 0x0100));
         $("#a2").html(hex((this.pc + 2) * 2 + 0x0100));
@@ -198,13 +228,7 @@ function Simulation(code) {
             $("#i2").html(this.code[this.pc + 2].toString()).removeClass("achurado");
         else
             $("#i2").html("[LIXO]").addClass("achurado");
-
-        //Display the pipeline
-        $("#fetch").html(this.pipeline[0].toString());
-        $("#decode").html(this.pipeline[1].toString());
-        $("#execute").html(this.pipeline[2].toString());
-        $("#memory").html(this.pipeline[3].toString());
-        $("#wback").html(this.pipeline[4].toString());
+        */
 
         // Displays the registers
         $("#pc").html(hex(this.pc * 2 + 0x0100));
@@ -217,7 +241,7 @@ function Simulation(code) {
 
         // Displays the stack
         $("#stack>tbody>*").remove();
-        for(var i in this.stack)
+        for(i in this.stack)
             $("#stack>tbody").prepend(prepare_stack_entry(this.stack[i]));
 
         var stack_row = prepare_stack_entry(['achurado', this.sp, "[LIXO]"]);
@@ -247,26 +271,28 @@ function Simulation(code) {
     this.pop_r = function(n) {
         this.gpr[n] = this.stack.pop()[2];
         this.sp += 2;
-    }
+    };
 
     // Verifica se ha interrupções no pipeline e ajusta o estado de acordo
     this.verify_interrupt = function() {
         if(this.state == "halt")
             return;
         
-        if(this.pipeline[2].op == "div" && this.gpr[this.pipeline[2].rz] == 0) {
-            this.state = "interrupt";
-            this.substate = this.is_precise ? "p_detected" : "i_detected";
-            setHint("Divisão por zero detectada!");
-            $("#execute").addClass("danger");
-            return;
-        } else if(this.pipeline[2].op == "mul" &&
-                this.gpr[this.pipeline[2].ry] * this.gpr[this.pipeline[2].rz] > 65535) {
-            this.state = "interrupt";
-            this.substate = this.is_precise ? "p_detected" : "i_detected";
-            setHint("Overflow detectado!");
-            $("#execute").addClass("danger");
-            return;
+        if (this.pipeline.length >= 3) {
+            if(this.pipeline[2].op == "div" && this.gpr[this.pipeline[2].rz] === 0) {
+                this.state = "interrupt";
+                this.substate = this.is_precise ? "p_detected" : "i_detected";
+                setHint("Divisão por zero detectada!");
+                $("#execute").addClass("danger");
+                return 2;
+            } else if(this.pipeline[2].op == "mul" &&
+                    this.gpr[this.pipeline[2].ry] * this.gpr[this.pipeline[2].rz] > 65535) {
+                this.state = "interrupt";
+                this.substate = this.is_precise ? "p_detected" : "i_detected";
+                setHint("Overflow detectado!");
+                $("#execute").addClass("danger");
+                return 2;
+            }
         }
 
         this.state = "running";
@@ -276,7 +302,7 @@ function Simulation(code) {
     this.handle_interrupt = function() {
         switch(this.substate) {
             case "i_detected":
-                this.substate = "halt";
+                this.state = "halt";
                 setHint("Interrupções imprecisas não implementadas!");
                 break;
 
@@ -286,26 +312,26 @@ function Simulation(code) {
                 break;
 
             case "p_empty":
-                if(this.pipeline[3].op == 'nop' && this.pipeline[4].op == 'nop') {
+                if(this.pipeline.length > this.interrupt_pos + 1) {
+                    setHint("Termina de executar as intruções que entraram antes da interrupção.")
+                    this.commit(this.pipeline.pop());
+                } else {
                     setHint("Não há mais instruções para terminar.");
                     this.substate = 'p_change_pc';
-                } else {
-                    setHint("Termina de executar as intruções que entraram antes da interrupção.")
-                    this.commit(this.pipeline[4]);
-                    this.pipeline[4] = this.pipeline[3];
-                    this.pipeline[3] = nop();
                 }
                 break;
 
             case "p_change_pc":
                 setHint("Reposiciona PC logo apontando para a instrução seguinte á interrompida.");
-                this.pc -= 2;
+                this.pc -= this.pipeline.length - 1;
                 this.substate = "p_clear";
+                this.gambi = this.pipeline.length - 1;
                 break;
 
             case "p_clear":
                 setHint("Esvazia o conteúdo do pipeline.");
-                this.pipeline[0] = this.pipeline[1] = this.pipeline[2] = nop();
+                this.gambi = -1;
+                this.pipeline = [];
                 this.substate = "p_push_pc";
                 $("#execute").removeClass("danger");
                 break;
@@ -346,6 +372,8 @@ function Simulation(code) {
                 this.pc = this.stack.pop()[2];
                 this.sp += 4;
                 this.state = "running";
+                this.finished.unshift(this.code[this.pc - 1]);
+                this.gambi = 0;
                 break;
             
         }
@@ -398,6 +426,7 @@ function Simulation(code) {
                 console.error("Invalid instruction: " + inst.op);
             case "nop":
         }
+        this.finished.unshift(inst);
     };
 
     this.advance = function() {
@@ -411,11 +440,12 @@ function Simulation(code) {
         this.pipeline.unshift(inst);
 
         // Aplica os calculos da instrução finalizada e tira do pipeline
-        this.commit(this.pipeline.pop());
+        if(this.pipeline.length > 5)
+            this.commit(this.pipeline.pop());
 
         this.psw = Math.floor(Math.random() * 65536);
 
-        this.verify_interrupt();
+        this.interrupt_pos = this.verify_interrupt();
     };
 
     this.display();

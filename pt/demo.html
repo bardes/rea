@@ -9,7 +9,6 @@
 
         <!-- Bootstrap -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -90,7 +89,7 @@
             <div class="row">
                 <div class="col-xs-12 col-md-4 text-center">
                     <h2>Memória de Programa</h2>
-                    <table class="table table-bordered table-hover table-condensed table-response">
+                    <table id="prog" class="table table-bordered table-hover table-condensed table-response">
                         <thead>
                             <tr class="active">
                                 <td colspan="2">Endereço</td>
@@ -111,30 +110,6 @@
                             <td class="pc">[PC] <span class="glyphicon glyphicon-arrow-right"></span></td>
                             <td id="a0">0x0100</td>
                             <td id="i0">MUL R0 R1 R2</td>
-                        </tr>
-                    </table>
-
-                    <h4>Pipeline</h4>
-                    <table class="table table-bordered table-hover table-condensed table-response">
-                        <tr>
-                            <td>BUSCA</td>
-                            <td style="width:50%;" id="fetch">ADD R0 R1 R2</td>
-                        </tr>
-                        <tr>
-                            <td>DECODIFICAÇÃO</td>
-                            <td id="decode">SUB R0 R1 R2</td>
-                        </tr>
-                        <tr>
-                            <td>EXECUÇÃO</td>
-                            <td id="execute">MUL R0 R1 R2</td>
-                        </tr>
-                        <tr>
-                            <td>MEMÓRIA</td>
-                            <td id="memory">MUL R0 R1 R2</td>
-                        </tr>
-                        <tr>
-                            <td>ESCRITA</td>
-                            <td id="wback">MUL R0 R1 R2</td>
                         </tr>
                     </table>
 
