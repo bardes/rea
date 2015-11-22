@@ -1,5 +1,4 @@
 is_precise = true;
-stack_pos = 0x0ff4;
 
 function hex(n) {
     return '0x' + ("0000" + n.toString(16)).slice(-4).toUpperCase();
@@ -187,24 +186,26 @@ function Simulation(code) {
     this.display = function() {
 
         // Display the instructions
-        var lines = 11;
+        var lines = 14;
         $("#prog>tbody>*").remove();
-        for (var i = this.pc + 2; i > this.pc; --i, --lines)
-            this.put_instruction(this.code[i] || nop(), 0x100 + 2*i, "not_executed");
+        for (var i = this.pc + 3; i >= this.pc; --i, --lines)
+            this.put_instruction(this.code[i] || nop(), 0x100 + 2*i, "not_executed", "Não Exec.");
 
+        /*
         --lines;
         this.put_instruction(this.code[i] || nop(), 0x100 + 2*i--, "not_executed",
                 '[PC] <span class="text-right glyphicon glyphicon-arrow-right"></span>');
+        */
 
         for (var j in this.pipeline) {
-            this.put_instruction(this.pipeline[j], (i - j + this.gambi)*2 + 0x100, "pipeline", ">>>");
+            this.put_instruction(this.pipeline[j], (i - j + this.gambi)*2 + 0x100, "pipeline", "Executando");
             --lines;
         }
         
         
         // Insere as instruções dentro do pipe line
         for (j = 0; lines && j < this.finished.length; ++j, --lines)
-            this.put_instruction(this.finished[j], (i - this.pipeline.length - j + this.gambi)*2 + 0x100, "executed");
+            this.put_instruction(this.finished[j], (i - this.pipeline.length - j + this.gambi)*2 + 0x100, "executed", "Executada");
         
         for (; lines; --lines)
             this.put_instruction("---", undefined, undefined, "---");
@@ -469,12 +470,13 @@ function clearHintTitle() {
 
 function enableHints() {
     $("#reset").hover(function(){setHint("Reinicia a simulação.");}, clearHint);
-    $("#advance").hover(function(){setHint("Avança a simulação. (Um pulso de clock)");}, clearHint);
-    $("#int-type").hover(function(){setHint("Escolhe entre interrupções precisas ou imprecisas.");}, clearHint);
+    $("#advance").hover(function(){setHint("Avança a simulação.");}, clearHint);
+    //$("#int-type").hover(function(){setHint("Escolhe entre interrupções precisas ou imprecisas.");}, clearHint);
 }
 
 function disableHints() {
-    $("#reset, #advance, #int-type").unbind("mouseenter mouseleave");
+    //$("#reset, #advance, #int-type").unbind("mouseenter mouseleave");
+    $("#reset, #advance").unbind("mouseenter mouseleave");
     clearHint();
 }
 
@@ -514,13 +516,15 @@ $(function() {
     enableHints();
 
     // Garante que o botão mostre o estado certo
-    $("#int-type").html(sim.is_precise ? "Precisa" : "Imprecisa");
+    //$("#int-type").html(sim.is_precise ? "Precisa" : "Imprecisa");
 
+    /*
     // Configura o botão para togglar precisa/imprecisa
     $("#int-type").click(function(){
         sim.is_precise = !sim.is_precise;
         $("#int-type").html(sim.is_precise ? "Precisa" : "Imprecisa");
     });
+    */
 
     // Configura o botão de avançar a simulação
     $("#advance").click(function() {

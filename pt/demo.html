@@ -19,14 +19,11 @@
 
         <script src="../js/jquery-1.11.3.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/inst.js"></script>
         <script src="../js/demo.js"></script>
 
         <!-- Faz o texto ficar no centro da barra de progresso -->
         <style>
-            body {
-                font-family: 'mono', 'Inconsolata';
-                font-weight: medium;
-            }
             .achurado{
                 background: repeating-linear-gradient(
                 -5deg,
@@ -41,6 +38,18 @@
             #stack-wrapper {
                 max-height: 480px;
                 overflow-y: auto;
+            }
+
+            .not_executed {
+                background-color: #B6FFB2 !important;
+            }
+
+            .executed {
+                background-color: #FFB2E9 !important;
+            }
+
+            .pipeline {
+                background-color: #FFEEB2 !important;
             }
 
             .pc {
@@ -76,7 +85,8 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="./intro.html">Introdução</a></li>
-                        <li class="active"><a href="./demo.html">Demo</a></li>
+                        <li><a href="./howto.html">Como Usar</a></li>
+                        <li class="active"><a href="./demo.html">Simulação</a></li>
                         <li><a href="./sobre.html">Sobre</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -85,7 +95,7 @@
 
         <!-- Corpo do site -->
 
-        <div class="container">
+        <div class="container" style="font-family: 'mono';">
             <div class="row">
                 <div class="col-xs-12 col-md-4 text-center">
                     <h2>Memória de Programa</h2>
@@ -115,17 +125,8 @@
 
                     <div class="btn-toolba text-centerr">
                         <div class="btn-group">
-                            <button id="int-type" type="button" class="btn btn-default">Precisa</button>
                             <button id="reset" type="button" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
                             <button id="advance" type="button" class="btn btn-default"><span class="glyphicon glyphicon-menu-right"></span></button>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <div id="hint-title" class="panel-title">Ajuda</div>
-                        </div>
-                        <div id="hint" class="panel-body" style="line-height: 2ex; height: 8ex; font-size: 9pt; overflow: hidden;">
                         </div>
                     </div>
                 </div>
@@ -187,6 +188,13 @@
                             </tr>
                             -->
                         </table>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div id="hint-title" class="panel-title">Ajuda</div>
+                        </div>
+                        <div id="hint" class="panel-body" style="line-height: 2ex; height: 8ex; font-size: 9pt; overflow: hidden;">
+                        </div>
                     </div>
                 </div>
             </div>

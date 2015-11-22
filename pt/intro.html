@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +27,6 @@
           <div class="container-fluid">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -37,7 +36,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
                 <li class="active"><a href="./intro.html">Introdução</a></li>
-                <li><a href="./demo.html">Demo</a></li>
+                <li><a href="./howto.html">Como Usar</a></li>
+                <li><a href="./demo.html">Simulação</a></li>
                 <li><a href="./sobre.html">Sobre</a></li>
               </ul>
             </div><!-- /.navbar-collapse -->
@@ -46,26 +46,36 @@
 
         <!-- Corpo do site -->
 
-        <div class="jumbotron">
+        <div class="jumbotron" style="font-size: 1.5em;">
             <div class="container">
-                <h1>Interrupções Precisas e Imprecisas</h1>
+                <h1>Interrupções Precisas</h1>
                 <p>
-                    Este REA (Recurso Educacional Aberto) tem como objetivo mostrar o que são e como funcionam interrupções
-                    precisas e imprecisas. Ambas são métodos diferentes de lidar com o mesmo problema: interromper (e retomar) a execução
-                    de programas numa CPU que possua um pipiline.
+                    Este REA visa destacar graficamente as propriedades de interrupções precisas através de uma simulação.
+                    A simulação apresentada ilustra um programa em execução sofrendo uma interrupção (precisa) e passando por todas as
+                    etapas necessárias para tratá-la corretamente.
                 </p>
                 <p>
-                    Quando uma interupção acontece é preciso determinar a causa,
-                    tratá-la e retomar a execução normal, quando possível, ou finalizar o programa afetado, porém a presença do
-                    pipiline torna essa tarefa não trivial, já que qualquer uma das instruções no pipeline pode causar uma interrupção.
+                    Quando uma interupção precisa acontece é necessário determinar sua causa, tratá-la quando possível, e retomar
+                    a execução normal. A presença do pipiline porém, torna essa tarefa não trivial, já que múltiplas instruções
+                    parcialmente executadas podem estar presentes no pipeline.
                 </p>
                 <p>
-                    Interrupções PRECISAS resolvem esse problema em diversos passos, garantindo que a CPU esteja num estado consistente.
-                    Já as interrupções IMPRECISAS são tratadas em menos etapas (melhor tempo de resposta), porém delegando a responsabilidade
-                    de ajustar o estado da CPU para as rotinas de tratamento de interrupção.
-                    </p>
+                    Por isso, para garantir a semântica de uma interrupção precisa é necessário atender os seguintes critérios:
+                </p>
+                <ul class="well" style="padding-left: 3em;">
+                    <li>PC tem que estar salvo em algum lugar seguro.</li>
+                    <li>O estado de execução da instrução apontada por PC está salvo em algum lugar seguro.</li>
+                    <li>Nenhuma instrução posterior à posição do PC foi executada.</li>
+                    <li>Todas as instruções anteriores à posição do PC foram <strong class="text-danger">completamente</strong> executadas.</li>
+                </ul>
+                <p>
+                    Esse critérios podem ser observados através da simulação presente neste REA. O programa simulado
+                    demonstra interrupções precisas de software, porém interrupções precisas de hardware comportam-se de
+                    maneira análoga exceto pelo fato de que todas as intrções do pipeline podem ser terminadas antes do
+                    controle ser transferido para a rotina de tratamento.
+                </p>
 
-                <p><a class="btn btn-primary btn-lg" href="./demo.html" role="button">Ver Demo!</a></p>
+                <p><a class="btn btn-primary btn-lg" href="./demo.html" role="button">Começar simulação</a></p>
             </div>
         </div>
     </body>
