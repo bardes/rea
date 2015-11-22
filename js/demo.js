@@ -188,7 +188,7 @@ function Simulation(code) {
 
             case "p_empty":
                 if(this.pipeline.length > this.interrupt_pos + 1) {
-                    setHint("Termina de executar as intruções que entraram antes da interrupção.")
+                    setHint("Termina de executar as intruções que entraram antes da interrupção.");
                     this.commit(this.pipeline.pop());
                 } else {
                     setHint("Não há mais instruções para terminar.");
@@ -343,6 +343,7 @@ function clearHintTitle() {
 }
 
 function enableHints() {
+    $("#goback").hover(function(){setHint("Volta a simulação para o estado anterior.");}, clearHint);
     $("#reset").hover(function(){setHint("Reinicia a simulação.");}, clearHint);
     $("#advance").hover(function(){setHint("Avança a simulação.");}, clearHint);
     //$("#int-type").hover(function(){setHint("Escolhe entre interrupções precisas ou imprecisas.");}, clearHint);
@@ -350,14 +351,53 @@ function enableHints() {
 
 function disableHints() {
     //$("#reset, #advance, #int-type").unbind("mouseenter mouseleave");
-    $("#reset, #advance").unbind("mouseenter mouseleave");
+    $("#reset, #advance, #goback").unbind("mouseenter mouseleave");
     clearHint();
 }
+
+function MementoSim(code) {
+    this.memento = [new Simulation(code)];
+    this.current = 0;
+
+    this.memento[0].display();
+
+    this.step_forward = function() {
+        var last = this.memento.length - 1;
+        if(this.current == last) {  
+            if(this.memento[this.current].state === "halt") return;
+
+            var clone = $.extend(true, {}, this.memento[last]);
+            clone.advance();
+            clone.display();
+            this.memento.push(clone);
+            this.current += 1;
+        } else {
+            this.current += 1;
+            this.current_state().display();
+        }
+    };
+
+    this.step_backward = function() {
+        if(this.current > 0)  
+            this.current -= 1;
+        else {
+            enableHints();
+            setHint("Inicio da simulação atingido!");
+        }
+
+        this.memento[this.current].display();
+    };
+
+    this.current_state = function () {
+        return this.memento[this.current];
+    };
+}
+
 
 // Ponto de "entrada" (Document Ready)
 $(function() {
     // Garante que a simulação está num estado válido quando mostrar a página
-    sim = new Simulation(asm_code);
+    sim = new MementoSim(asm_code);
     enableHints();
 
     // Garante que o botão mostre o estado certo
@@ -373,20 +413,22 @@ $(function() {
 
     // Configura o botão de avançar a simulação
     $("#advance").click(function() {
-        if(sim.state == "reset")
+        if(sim.current_state().state === "reset")
             disableHints();
 
-        sim.advance();
-        sim.display();
+        sim.step_forward();
+    });
+
+    // Configura o botão de voltar
+    $("#goback").click(function() {
+        sim.step_backward();
     });
 
     // Configura o botão de reset
     $("#reset").click(function() {
-        if(sim.state != "reset") {
-            sim = new Simulation(asm_code);
-            enableHints();
-            $("#execute").removeClass("danger");
-        }
+        sim.current = 0;
+        sim.memento[0].display();
+        enableHints();
     });
 
 });
