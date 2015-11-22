@@ -1,3 +1,7 @@
+function nop() {
+    return new Instruction('nop');
+}
+
 // Código simulado (por enquanto "hardcoded")
 asm_code = new Array;
 asm_code.push(new Instruction('li', 0, 1337));
@@ -25,6 +29,16 @@ asm_code.push(nop());
 asm_code.push(nop());
 asm_code.push(nop());
 asm_code.push(nop());
+
+function populate_code() {
+    var code_table = $("#prog");
+    for (var i in asm_code) {
+        code_table.append($("<tr>").append(
+                        $("<td>").html(hex(i * 2 + 0x100)),
+                        $("<td>").html(asm_code[i].toString())
+                    ));
+    }
+}
 
 function hex(n) {
     return '0x' + ("0000" + n.toString(16)).slice(-4).toUpperCase();
