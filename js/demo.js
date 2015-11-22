@@ -39,6 +39,7 @@ function Simulation(code) {
     this.stack = [];            // Stack's content
     this.data = [];             // Program data
     this.gambi = 0;
+    this.hint = undefined;
     
     this.gpr = [0,0,0,0];       // Data registers start zeroed
 
@@ -57,6 +58,8 @@ function Simulation(code) {
     };
 
     this.display = function() {
+        // Show hint when available
+        if(this.hint) setHint(this.hint);
 
         // Display the instructions
         var lines = 14;
@@ -159,13 +162,13 @@ function Simulation(code) {
             if(this.pipeline[2].op == "div" && this.gpr[this.pipeline[2].rz] === 0) {
                 this.state = "interrupt";
                 this.substate = this.is_precise ? "p_detected" : "i_detected";
-                setHint("Divisão por zero detectada!");
+                this.hint = "Divisão por zero detectada!";
                 return 2;
             } else if(this.pipeline[2].op == "mul" &&
                     this.gpr[this.pipeline[2].ry] * this.gpr[this.pipeline[2].rz] > 65535) {
                 this.state = "interrupt";
                 this.substate = this.is_precise ? "p_detected" : "i_detected";
-                setHint("Overflow detectado!");
+                this.hint = "Overflow detectado!";
                 return 2;
             }
         }
@@ -178,33 +181,33 @@ function Simulation(code) {
         switch(this.substate) {
             case "i_detected":
                 this.state = "halt";
-                setHint("Interrupções imprecisas não implementadas!");
+                this.hint = "Interrupções imprecisas não implementadas!";
                 break;
 
             case "p_detected":
-                setHint("Tratando interupção precisa.");
+                this.hint = "Tratando interupção precisa.";
                 this.substate = "p_empty";
                 break;
 
             case "p_empty":
                 if(this.pipeline.length > this.interrupt_pos + 1) {
-                    setHint("Termina de executar as intruções que entraram antes da interrupção.");
+                    this.hint = "Termina de executar as intruções que entraram antes da interrupção.";
                     this.commit(this.pipeline.pop());
                 } else {
-                    setHint("Não há mais instruções para terminar.");
+                    this.hint = "Não há mais instruções para terminar.";
                     this.substate = 'p_change_pc';
                 }
                 break;
 
             case "p_change_pc":
-                setHint("Reposiciona PC logo apontando para a instrução seguinte á interrompida.");
+                this.hint = "Reposiciona PC logo apontando para a instrução seguinte á interrompida.";
                 this.pc -= this.pipeline.length - 1;
                 this.substate = "p_clear";
                 this.gambi = this.pipeline.length - 1;
                 break;
 
             case "p_clear":
-                setHint("Esvazia o conteúdo do pipeline.");
+                this.hint = "Esvazia o conteúdo do pipeline.";
                 this.gambi = -1;
                 this.pipeline = [];
                 this.substate = "p_push_pc";
@@ -212,19 +215,19 @@ function Simulation(code) {
                 break;
 
             case "p_push_pc":
-                setHint("Coloca o PC na pilha.");
+                this.hint = "Coloca o PC na pilha.";
                 this.push_pc();
                 this.substate = "p_push_psw";
                 break;
 
             case "p_push_psw":
-                setHint("Coloca o PSW na pilha.");
+                this.hint = "Coloca o PSW na pilha.";
                 this.push_psw();
                 this.substate = "p_push_gpr";
                 break;
 
             case "p_push_gpr":
-                setHint("Coloca os RPGs na pilha.");
+                this.hint = "Coloca os RPGs na pilha.";
                 this.push_r(0);
                 this.push_r(1);
                 this.push_r(2);
@@ -233,12 +236,12 @@ function Simulation(code) {
                 break;
 
             case "p_handle":
-                setHint("Rotina de tratamento de interrupção é executada.");
+                this.hint = "Rotina de tratamento de interrupção é executada.";
                 this.substate = "p_return";
                 break;
 
             case "p_return":
-                setHint("Execução normal é retomada.");
+                this.hint = "Execução normal é retomada.";
                 this.pop_r(3);
                 this.pop_r(2);
                 this.pop_r(1);
@@ -294,7 +297,7 @@ function Simulation(code) {
 
             case "hlt":
                 this.state = "halt";
-                setHint("HALT!");
+                this.hint = "HALT!";
                 break;
 
             default:
