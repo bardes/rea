@@ -38,7 +38,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="./intro.html">Introdução</a></li>
                         <li class="active"><a href="./howto.html">Como Usar</a></li>
-                        <li><a href="./intro.html">Código</a></li>
+                        <li><a href="./code.html">Código</a></li>
                         <li><a href="./demo.html">Simulação</a></li>
                         <li><a href="./sobre.html">Sobre</a></li>
                     </ul>
@@ -47,34 +47,109 @@
         </nav>
 
         <!-- Corpo do site -->
-
         <div class="container">
-                <h2 class="text-center">Instruções de Uso da Simulação</h2>
-                <p>
-                    Ipsum libero enim optio sit accusamus! Voluptatibus
-                    accusantium illum nam natus explicabo alias delectus
-                    placeat incidunt error at aspernatur non ullam dicta.
-                    Quaerat deleniti quod fuga ipsam sit et. Ex modi dolor
-                    aperiam tempora doloremque suscipit natus dicta animi
-                    illum, mollitia culpa odit. Totam corporis commodi facilis
-                    quas aliquam minima vero, sit ipsa iusto eum? Molestias
-                    quod perferendis placeat reprehenderit?
-                </p>
-                <p>
-                    Dolor vitae nulla deserunt officiis eveniet eos ex fugiat
-                    amet iure id illo et exercitationem? Ratione natus velit
-                    deleniti cupiditate aperiam! Saepe temporibus libero
-                    corporis temporibus eius laudantium eveniet natus? Earum
-                    odit excepturi aliquam beatae impedit iusto impedit
-                    cupiditate facere accusamus enim molestias? Nesciunt
-                    reiciendis beatae fugiat nemo excepturi! Ipsum quod
-                    deserunt eum animi dolores itaque iusto. Pariatur
-                    consequuntur recusandae?
-                </p>
-                <p class="text-center">
-                    <a class="btn btn-primary btn-lg" href="./demo.html" role="button">Começar simulação</a>
-                </p>
+            <div class="page-header">
+                <h1 class="text-center">Instruções de Uso da Simulação</h1>
+            </div>
+    
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>
+                        Este REA pode ser usado e, sala de aula como uma ferramenta para ilustrar e destacar os passos
+                        necessários para o tratamento de interrupções precisas. Por ser uma ferramenta interativa é
+                        possível mostrar graficamente o que acontece em cada passo, o que facilita a explicação e
+                        compreensão em sala de aula.
+                    </p>
+                    <p>
+                        Além disso a ferramenta também pode ser usada por alunos, sem o auxílio de um tutor, como uma
+                        forma de estudo e revisão. Em particular a possibilidade de avançar e voltar os passos da
+                        simulação é bastante útil para destacar as mudanças entre cada passo.
+                    </p>
+                    <p>
+                        A seguir estão explicados o que são cada um dos elementos visuais da simulação:
+                    </p>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4 pull-left">
+                    <h3 class="text-center">Botões</h3>
+                    <img src="../img/btn.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        São usados para mudar o estado da simulação. As funções são respectivamente: voltar ao estado
+                        anterior (se existir), reiniciar a simulação (voltar para o estado inicial), e avançar para o
+                        próximo estado. 
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Código</h3>
+                    <img src="../img/code.png" class="img-responsive center-block">
+                    <p class="text-center">
+                        <a class="btn btn-primary btn-xs" href="./code.html" role="button">Ver Código</a>
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Ajuda</h3>
+                    <img src="../img/help.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        Indica os principais eventos que ocorreram no passo atual da simulação.
+                    </p>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Program Counter [PC]</h3>
+                    <img src="../img/pc.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        Guarda endereço da próxima instrução a entrar no pipeline. 
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Stack Pointer [SP]</h3>
+                    <img src="../img/sp.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        Guarda endereço do topo da pilha.
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Program Status Word [PSW]</h3>
+                    <img src="../img/psw.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        Contém os bits de estado do sistema, como modo de execução corrente e prévio, estado da ULA etc...
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Registradores de Propósito Geral [GPR]</h3>
+                    <img src="../img/gpr.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        São registradores genéricos utilizados para computar os resultados de cada operação do programa. Essa tabela indica o
+                        valor atual de cada um dos registragores de propósito geral.
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Memória de Programa</h3>
+                    <img src="../img/prog.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        Mostra as instruções que ainda não foram executadas (representadas pela cor verde), instruções que estão sendo
+                        executadas (amarelas) e instruções que já foram executadas completamente (representadas por rosa). Na tabela de Memória
+                        de programa também é indicado o endereço e respectiva instrução referente, assim, pode-se acompanhar para qual endereço
+                        PC está apontando (basta olhar o registrador PC também representado). Quando houver uma interrupção precisa, o status da
+                        instrução será alterado para “Interrompida”, indicando assim a partir de qual instrução ocorre a interrupção.
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h3 class="text-center">Pilha (Stack)</h3>
+                    <img src="../img/stack.png" class="img-responsive center-block">
+                    <p class="text-justify">
+                        Indica os endereços e respectivos conteúdos armazenados para se salvar o contexto do processo em execução, armazenando o
+                        conteúdo dos registradores. Na tabela pode-se visualizar as informações sendo salvas no endereço apontado por SP e seu
+                        conteúdo, colorido com a respectiva cor do registrador (amarelo para registradores gerais, rosa para PC, verde para SP e
+                        roxo para PSW).
+                    </p>
+                </div>
+            </div>
+            
         </div>
     </body>
 </html>
