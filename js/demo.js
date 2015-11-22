@@ -71,7 +71,10 @@ function Simulation(code) {
         */
 
         for (var j in this.pipeline) {
-            this.put_instruction(this.pipeline[j], (i - j + this.gambi)*2 + 0x100, "pipeline", "Executando");
+            if(j == this.interrupt_pos)
+                this.put_instruction(this.pipeline[j], (i - j + this.gambi)*2 + 0x100, "danger", "Interrompida");
+            else
+                this.put_instruction(this.pipeline[j], (i - j + this.gambi)*2 + 0x100, "pipeline", "Executando");
             --lines;
         }
         
@@ -152,19 +155,17 @@ function Simulation(code) {
         if(this.state == "halt")
             return;
         
-        if (this.pipeline.length >= 3) {
+        if (this.pipeline.length > 2) {
             if(this.pipeline[2].op == "div" && this.gpr[this.pipeline[2].rz] === 0) {
                 this.state = "interrupt";
                 this.substate = this.is_precise ? "p_detected" : "i_detected";
                 setHint("Divisão por zero detectada!");
-                $("#execute").addClass("danger");
                 return 2;
             } else if(this.pipeline[2].op == "mul" &&
                     this.gpr[this.pipeline[2].ry] * this.gpr[this.pipeline[2].rz] > 65535) {
                 this.state = "interrupt";
                 this.substate = this.is_precise ? "p_detected" : "i_detected";
                 setHint("Overflow detectado!");
-                $("#execute").addClass("danger");
                 return 2;
             }
         }
