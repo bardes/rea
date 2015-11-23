@@ -102,14 +102,14 @@
                     <h3 class="text-center">Program Counter [PC]</h3>
                     <img src="../img/pc.png" class="img-responsive center-block">
                     <p class="text-justify">
-                        Guarda endereço da próxima instrução a entrar no pipeline. 
+                        Guarda o endereço da próxima instrução a entrar no pipeline. 
                     </p>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <h3 class="text-center">Stack Pointer [SP]</h3>
                     <img src="../img/sp.png" class="img-responsive center-block">
                     <p class="text-justify">
-                        Guarda endereço do topo da pilha.
+                        Guarda o endereço do topo da pilha.
                     </p>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4">
@@ -142,10 +142,9 @@
                     <h3 class="text-center">Pilha (Stack)</h3>
                     <img src="../img/stack.png" class="img-responsive center-block">
                     <p class="text-justify">
-                        Indica os endereços e respectivos conteúdos armazenados para se salvar o contexto do processo em execução, armazenando o
-                        conteúdo dos registradores. Na tabela pode-se visualizar as informações sendo salvas no endereço apontado por SP e seu
-                        conteúdo, colorido com a respectiva cor do registrador (amarelo para registradores gerais, rosa para PC, verde para SP e
-                        roxo para PSW).
+                        Indica os endereços e os respectivos conteúdos armazenados na pilha. A pilha é usada pelas
+                        instruções PSH/POP e também durante o tratamento de interrupções precisas para se salvar o
+                        contexto do processo atual. As cores dos dados na pilha indicam sua origem.
                     </p>
                 </div>
             </div>

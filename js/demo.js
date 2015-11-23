@@ -39,7 +39,7 @@ function Simulation(code) {
     this.stack = [];            // Stack's content
     this.data = [];             // Program data
     this.gambi = 0;
-    this.hint = undefined;
+    this.hint = '';
     
     this.gpr = [0,0,0,0];       // Data registers start zeroed
 
@@ -59,7 +59,7 @@ function Simulation(code) {
 
     this.display = function() {
         // Show hint when available
-        if(this.hint) setHint(this.hint);
+        setHint(this.hint);
 
         // Display the instructions
         var lines = 14;
